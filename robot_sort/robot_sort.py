@@ -49,6 +49,11 @@ class SortingRobot:
         else:
             return False
 
+    def reset(self):
+        self.set_light_off()
+        while self.can_move_left():
+          self.move_left()
+
     def swap_item(self):
         """
         The robot swaps its currently held item with the list item in front
@@ -81,23 +86,47 @@ class SortingRobot:
         Turn on the robot's light
         """
         self._light = "ON"
+
     def set_light_off(self):
         """
         Turn off the robot's light
         """
         self._light = "OFF"
+
     def light_is_on(self):
         """
         Returns True if the robot's light is on and False otherwise.
         """
         return self._light == "ON"
 
+    def run_loop(self):
+		    while self.can_move_right():
+				    self.sort_loop()
+
     def sort(self):
         """
         Sort the robot's list.
         """
-        # Fill this out
-        pass
+        self.run_loop()
+        while self.light_is_on():
+            self.reset()
+            self.run_loop()
+        print(f'sorted in {self._time} cliks')
+
+    def sort_loop(self):
+      self.move_right()
+      self.swap_item()
+      self.move_left()
+      if self.compare_item() == -1:
+        self.swap_item()
+        self.set_light_on()
+      self.move_right()
+      self.swap_item()
+
+
+
+
+
 
 
 if __name__ == "__main__":
